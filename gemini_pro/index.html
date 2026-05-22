@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SynthesiaX | AI Voice Studio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <canvas id="particles-bg"></canvas>
+
+    <div class="app-container">
+        <!-- Navigation -->
+        <nav class="navbar glass-panel">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fa-solid fa-wave-square"></i>
+                </div>
+                <span>SynthesiaX <span
+                        style="font-size: 0.6em; color: var(--text-muted); font-weight: 400; margin-left: 5px;">Native
+                        TTS</span></span>
+            </div>
+            <div class="nav-actions">
+                <button id="export-btn" class="icon-btn" title="Export Settings">
+                    <i class="fa-solid fa-download"></i>
+                </button>
+                <button id="theme-toggle" class="icon-btn" title="Toggle Theme">
+                    <i class="fa-solid fa-sun"></i>
+                </button>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <!-- Presets Section -->
+            <section class="presets-section slide-up">
+                <h2 class="section-title"><i class="fa-solid fa-wand-magic-sparkles"></i> Quick Presets</h2>
+                <div class="presets-container" id="presets-container">
+                    <!-- Presets injected via JS -->
+                </div>
+            </section>
+
+            <div class="studio-grid">
+                <!-- Left Column: Input & Output -->
+                <div class="col-left slide-up" style="animation-delay: 0.1s;">
+
+                    <!-- Text Input Card -->
+                    <div class="card glass-panel text-input-card">
+                        <div class="card-header">
+                            <h3><i class="fa-solid fa-align-left"></i> Script</h3>
+                            <div class="char-counter">
+                                <span id="char-count">0</span> / 1000
+                            </div>
+                        </div>
+                        <div class="input-wrapper">
+                            <textarea id="text-input"
+                                placeholder="Type or paste your script here... Try 'Welcome to the future of AI voice generation.'"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- AI Prompt Builder Display -->
+                    <div class="card glass-panel prompt-card">
+                        <div class="card-header">
+                            <h3><i class="fa-solid fa-microchip"></i> Voice Profile Active</h3>
+                            <span class="badge pulse-badge">Live</span>
+                        </div>
+                        <p id="dynamic-prompt" class="typing-effect">Waiting for configuration...</p>
+                    </div>
+
+                    <!-- Generate Button -->
+                    <button id="generate-btn" class="primary-btn">
+                        <span class="btn-text">Generate & Speak Voice</span>
+                        <i class="fa-solid fa-bolt"></i>
+                        <div class="btn-loader hidden"></div>
+                    </button>
+
+                    <!-- Audio Player (Hidden by default) -->
+                    <div id="player-card" class="card glass-panel player-card hidden slide-up">
+                        <div class="card-header">
+                            <h3><i class="fa-solid fa-headphones"></i> Output Audio</h3>
+                            <button id="download-audio-btn" class="icon-btn small" title="Download Audio"><i
+                                    class="fa-solid fa-file-arrow-down"></i></button>
+                        </div>
+
+                        <div class="waveform-container">
+                            <div class="bars" id="waveform-bars">
+                                <!-- Bars generated in JS -->
+                            </div>
+                        </div>
+
+                        <div class="player-controls">
+                            <button id="play-pause-btn" class="play-btn" title="Play/Pause"><i
+                                    class="fa-solid fa-play"></i></button>
+                            <button id="stop-btn" class="icon-btn" style="color:var(--text-main);" title="Stop"><i
+                                    class="fa-solid fa-stop"></i></button>
+
+                            <div class="progress-container">
+                                <input type="range" id="seek-slider" min="0" max="100" value="0" disabled
+                                    title="Progress (Native TTS cannot seek backward)">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- History Section -->
+                    <div class="card glass-panel history-card">
+                        <div class="card-header">
+                            <h3><i class="fa-solid fa-clock-rotate-left"></i> Generation History</h3>
+                        </div>
+                        <div class="history-list" id="history-list">
+                            <div class="empty-state">No voices generated yet.</div>
+                            <!-- History items injected via JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Settings -->
+                <div class="col-right slide-up" style="animation-delay: 0.2s;">
+                    <div class="card glass-panel settings-card">
+                        <div class="card-header">
+                            <h3><i class="fa-solid fa-sliders"></i> Voice Configuration</h3>
+                        </div>
+
+                        <div class="settings-grid">
+                            <!-- Language -->
+                            <div class="form-group">
+                                <label for="language-select">Language (Based on OS)</label>
+                                <div class="select-wrapper">
+                                    <select id="language-select">
+                                        <option value="">Loading...</option>
+                                    </select>
+                                    <i class="fa-solid fa-chevron-down select-icon"></i>
+                                </div>
+                            </div>
+
+                            <!-- Voice / Accent -->
+                            <div class="form-group">
+                                <label for="accent-select">Voice Model</label>
+                                <div class="select-wrapper">
+                                    <select id="accent-select">
+                                        <option value="">Loading voices...</option>
+                                    </select>
+                                    <i class="fa-solid fa-chevron-down select-icon"></i>
+                                </div>
+                            </div>
+
+                            <!-- Gender Preference -->
+                            <div class="form-group">
+                                <label for="gender-select">Gender Preference</label>
+                                <div class="select-wrapper">
+                                    <select id="gender-select">
+                                        <option value="any">Any (Native default)</option>
+                                        <option value="male">Male (Attempt match)</option>
+                                        <option value="female">Female (Attempt match)</option>
+                                    </select>
+                                    <i class="fa-solid fa-chevron-down select-icon"></i>
+                                </div>
+                            </div>
+
+                            <!-- Emotion -->
+                            <div class="form-group">
+                                <label for="emotion-select">Emotion / Tone (Simulated)</label>
+                                <div class="select-wrapper">
+                                    <select id="emotion-select"></select>
+                                    <i class="fa-solid fa-chevron-down select-icon"></i>
+                                </div>
+                            </div>
+
+                            <!-- Style -->
+                            <div class="form-group full-width">
+                                <label for="style-select">Speaking Style (Simulated)</label>
+                                <div class="select-wrapper">
+                                    <select id="style-select"></select>
+                                    <i class="fa-solid fa-chevron-down select-icon"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr class="divider">
+
+                        <div class="card-header">
+                            <h3><i class="fa-solid fa-wave-square"></i> Advanced Controls</h3>
+                        </div>
+
+                        <!-- Sliders -->
+                        <div class="sliders-container">
+                            <!-- Speed -->
+                            <div class="slider-group">
+                                <div class="slider-header">
+                                    <label>Speed (Rate)</label>
+                                    <span class="slider-val" id="val-speed">1.0x</span>
+                                </div>
+                                <input type="range" id="slider-speed" min="0.5" max="2.0" step="0.1" value="1.0">
+                            </div>
+
+                            <!-- Pitch -->
+                            <div class="slider-group">
+                                <div class="slider-header">
+                                    <label>Pitch</label>
+                                    <span class="slider-val" id="val-pitch">0</span>
+                                </div>
+                                <input type="range" id="slider-pitch" min="-10" max="10" step="1" value="0">
+                            </div>
+
+                            <!-- Volume -->
+                            <div class="slider-group">
+                                <div class="slider-header">
+                                    <label>Volume</label>
+                                    <span class="slider-val" id="val-stability">100%</span>
+                                </div>
+                                <input type="range" id="slider-stability" min="0" max="100" step="1" value="100">
+                            </div>
+
+                            <!-- Creativity (Placebo/UI match for TTS simulation) -->
+                            <div class="slider-group">
+                                <div class="slider-header">
+                                    <label>Expressiveness</label>
+                                    <span class="slider-val" id="val-creativity">50%</span>
+                                </div>
+                                <input type="range" id="slider-creativity" min="0" max="100" step="1" value="50">
+                                <small class="helper-text">Modifies inflection shifts artificially based on emotion
+                                    settings.</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="toast"></div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

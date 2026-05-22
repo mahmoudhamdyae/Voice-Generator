@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Models Playground</title>
+    <!-- Modern Typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Animated Particle Background -->
+    <canvas id="particle-canvas"></canvas>
+    
+    <!-- Animated Gradient Overlay -->
+    <div class="gradient-bg"></div>
+
+    <div class="container">
+        <header class="fade-in">
+            <div class="header-badge">Playground Launcher</div>
+            <h1>AI Models <span class="text-gradient">Playground</span></h1>
+            <p class="subtitle">Launch and compare AI-generated projects</p>
+        </header>
+
+        <main class="grid">
+            <!-- Gemini Pro Card -->
+            <div class="card fade-in stagger-1" style="--accent: #4285F4;">
+                <div class="card-icon">
+                    <i class="fa-solid fa-brain"></i>
+                </div>
+                <h2>Gemini Pro</h2>
+                <p>Advanced reasoning and long-context generation</p>
+                <a href="./gemini_pro/index.html" class="launch-btn">
+                    Launch Model <i class="fa-solid fa-arrow-right"></i>
+                </a>
+            </div>
+
+            <!-- Gemini Flash Card -->
+            <div class="card fade-in stagger-2" style="--accent: #FBBC05;">
+                <div class="card-icon">
+                    <i class="fa-solid fa-bolt"></i>
+                </div>
+                <h2>Gemini Flash</h2>
+                <p>Fast multimodal responses optimized for speed</p>
+                <a href="./gemini_flash/index.html" class="launch-btn">
+                    Launch Model <i class="fa-solid fa-arrow-right"></i>
+                </a>
+            </div>
+
+            <!-- GPT Card -->
+            <div class="card fade-in stagger-3" style="--accent: #10a37f;">
+                <div class="card-icon">
+                    <i class="fa-solid fa-comment-nodes"></i>
+                </div>
+                <h2>GPT</h2>
+                <p>Powerful conversational intelligence and coding</p>
+                <a href="./gpt/index.html" class="launch-btn">
+                    Launch Model <i class="fa-solid fa-arrow-right"></i>
+                </a>
+            </div>
+
+            <!-- Claude Card -->
+            <div class="card fade-in stagger-4" style="--accent: #d97757;">
+                <div class="card-icon">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </div>
+                <h2>Claude</h2>
+                <p>Safe, creative, and highly structured AI outputs</p>
+                <a href="./claude/index.html" class="launch-btn">
+                    Launch Model <i class="fa-solid fa-arrow-right"></i>
+                </a>
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

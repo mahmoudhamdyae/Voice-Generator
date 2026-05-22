@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VoiceForge AI — Voice Generator Studio</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <!-- Particle Canvas Background -->
+  <canvas id="particleCanvas"></canvas>
+
+  <!-- App Shell -->
+  <div class="app-shell">
+
+    <!-- ── HEADER ── -->
+    <header class="header glass-card">
+      <div class="header-left">
+        <div class="logo">
+          <div class="logo-icon">
+            <svg viewBox="0 0 32 32" fill="none">
+              <circle cx="16" cy="16" r="15" stroke="url(#lg1)" stroke-width="2"/>
+              <path d="M10 16 Q13 10 16 16 Q19 22 22 16" stroke="url(#lg2)" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+              <defs>
+                <linearGradient id="lg1" x1="0" y1="0" x2="32" y2="32">
+                  <stop offset="0%" stop-color="#7c3aed"/>
+                  <stop offset="100%" stop-color="#06b6d4"/>
+                </linearGradient>
+                <linearGradient id="lg2" x1="0" y1="0" x2="32" y2="0">
+                  <stop offset="0%" stop-color="#a78bfa"/>
+                  <stop offset="100%" stop-color="#38bdf8"/>
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+          <div class="logo-text">
+            <span class="logo-name">VoiceForge</span>
+            <span class="logo-badge">AI</span>
+          </div>
+        </div>
+        <nav class="header-nav">
+          <a href="#studio" class="nav-link active">Studio</a>
+          <a href="#presets" class="nav-link">Presets</a>
+          <a href="#history" class="nav-link">History</a>
+        </nav>
+      </div>
+      <div class="header-right">
+        <button class="btn-icon" id="exportSettingsBtn" title="Export Settings">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+        </button>
+        <button class="btn-icon" id="importSettingsBtn" title="Import Settings">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+        </button>
+        <input type="file" id="importFileInput" accept=".json" style="display:none"/>
+        <div class="theme-toggle-wrap">
+          <span class="theme-icon">🌙</span>
+          <label class="theme-toggle">
+            <input type="checkbox" id="themeToggle" />
+            <span class="toggle-track"><span class="toggle-thumb"></span></span>
+          </label>
+          <span class="theme-icon">☀️</span>
+        </div>
+        <button class="btn-primary btn-sm">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2M12 11a4 4 0 100-8 4 4 0 000 8z"/></svg>
+          Sign In
+        </button>
+      </div>
+    </header>
+
+    <!-- ── MAIN ── -->
+    <main class="main-content">
+
+      <!-- Hero Section -->
+      <section class="hero-section fade-in">
+        <div class="hero-badge">
+          <span class="badge-dot"></span>
+          Powered by Advanced Neural TTS
+        </div>
+        <h1 class="hero-title">
+          Transform Text into<br/>
+          <span class="gradient-text typing-target"></span>
+        </h1>
+        <p class="hero-subtitle">Create lifelike voices with emotions, accents & styles using cutting-edge AI technology.</p>
+        <div class="hero-stats">
+          <div class="stat-item"><span class="stat-num">50+</span><span class="stat-label">Languages</span></div>
+          <div class="stat-divider"></div>
+          <div class="stat-item"><span class="stat-num">200+</span><span class="stat-label">Voice Styles</span></div>
+          <div class="stat-divider"></div>
+          <div class="stat-item"><span class="stat-num">99%</span><span class="stat-label">Accuracy</span></div>
+        </div>
+      </section>
+
+      <!-- Studio Layout -->
+      <section class="studio-layout" id="studio">
+
+        <!-- LEFT COLUMN -->
+        <div class="studio-left">
+
+          <!-- Text Input -->
+          <div class="panel glass-card slide-up" id="textPanel">
+            <div class="panel-header">
+              <div class="panel-title">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                Script Editor
+              </div>
+              <div class="panel-actions">
+                <button class="btn-ghost btn-xs" id="clearTextBtn">Clear</button>
+                <button class="btn-ghost btn-xs" id="pasteExampleBtn">Example</button>
+              </div>
+            </div>
+            <div class="textarea-wrap">
+              <textarea
+                id="voiceText"
+                class="voice-textarea"
+                placeholder="Start typing your script here…&#10;&#10;Example: Welcome to VoiceForge AI — the most advanced voice synthesis platform on the planet."
+                maxlength="5000"
+                spellcheck="true"
+                aria-label="Voice script text"
+              ></textarea>
+              <div class="textarea-footer">
+                <div class="char-counter">
+                  <span id="charCount">0</span>
+                  <span class="char-max">/ 5000</span>
+                  <div class="char-bar"><div class="char-progress" id="charProgress"></div></div>
+                </div>
+                <div class="word-count"><span id="wordCount">0</span> words</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- AI Prompt Preview -->
+          <div class="panel glass-card slide-up" id="promptPanel">
+            <div class="panel-header">
+              <div class="panel-title">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3M12 17h.01"/></svg>
+                AI Prompt Preview
+              </div>
+              <button class="btn-ghost btn-xs" id="copyPromptBtn">Copy</button>
+            </div>
+            <div class="prompt-display">
+              <div class="prompt-text" id="promptText">Configure your voice settings to generate a prompt…</div>
+              <div class="prompt-tags" id="promptTags"></div>
+            </div>
+          </div>
+
+          <!-- Audio Player -->
+          <div class="panel glass-card slide-up" id="playerPanel" style="display:none">
+            <div class="panel-header">
+              <div class="panel-title">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"/></svg>
+                Generated Audio
+              </div>
+              <div class="panel-actions">
+                <span class="badge-success">Ready</span>
+              </div>
+            </div>
+            <div class="waveform-container">
+              <canvas id="waveformCanvas" height="80"></canvas>
+              <div class="waveform-overlay" id="waveformOverlay"></div>
+            </div>
+            <div class="player-controls">
+              <button class="player-btn" id="replayBtn" title="Replay">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg>
+              </button>
+              <button class="player-btn player-btn-main" id="playPauseBtn" title="Play/Pause">
+                <svg id="playIcon" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                <svg id="pauseIcon" viewBox="0 0 24 24" fill="currentColor" style="display:none"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+              </button>
+              <div class="seek-wrap">
+                <span class="time-label" id="currentTime">0:00</span>
+                <div class="seek-bar" id="seekBar">
+                  <div class="seek-progress" id="seekProgress"></div>
+                  <div class="seek-thumb" id="seekThumb"></div>
+                </div>
+                <span class="time-label" id="totalTime">0:30</span>
+              </div>
+              <button class="player-btn" id="downloadBtn" title="Download">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+              </button>
+            </div>
+            <audio id="audioPlayer" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" preload="auto"></audio>
+          </div>
+
+        </div>
+
+        <!-- RIGHT COLUMN -->
+        <div class="studio-right">
+
+          <!-- Voice Config Panel -->
+          <div class="panel glass-card slide-up" id="configPanel">
+            <div class="panel-header">
+              <div class="panel-title">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M4.93 4.93l1.41 1.41M4.93 19.07l1.41-1.41M19.07 19.07l-1.41-1.41M20 12h2M2 12h2M12 20v2M12 2v2"/></svg>
+                Voice Configuration
+              </div>
+            </div>
+
+            <!-- Language -->
+            <div class="config-section">
+              <label class="config-label">Language</label>
+              <div class="select-grid" id="languageGrid" role="radiogroup" aria-label="Language"></div>
+            </div>
+
+            <!-- Accent -->
+            <div class="config-section">
+              <label class="config-label">Accent / Dialect</label>
+              <div class="select-wrap">
+                <select id="accentSelect" class="styled-select" aria-label="Accent">
+                  <option value="">— Choose accent —</option>
+                </select>
+                <svg class="select-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+            </div>
+
+            <!-- Gender -->
+            <div class="config-section">
+              <label class="config-label">Gender</label>
+              <div class="gender-grid" id="genderGrid" role="radiogroup" aria-label="Gender"></div>
+            </div>
+
+            <!-- Emotion -->
+            <div class="config-section">
+              <label class="config-label">Emotion / Tone</label>
+              <div class="emotion-grid" id="emotionGrid" role="radiogroup" aria-label="Emotion"></div>
+            </div>
+
+            <!-- Style -->
+            <div class="config-section">
+              <label class="config-label">Speaking Style</label>
+              <div class="style-grid" id="styleGrid" role="radiogroup" aria-label="Speaking style"></div>
+            </div>
+
+            <!-- Voice Controls -->
+            <div class="config-section">
+              <label class="config-label">Voice Controls</label>
+              <div class="sliders-grid" id="slidersGrid"></div>
+            </div>
+
+          </div>
+
+          <!-- Generate Button -->
+          <button class="btn-generate" id="generateBtn" aria-label="Generate voice">
+            <span class="generate-inner">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+              <span class="generate-text">Generate Voice</span>
+            </span>
+            <div class="generate-ripple"></div>
+            <div class="loading-dots" id="loadingDots" style="display:none">
+              <span></span><span></span><span></span>
+            </div>
+          </button>
+
+        </div>
+      </section>
+
+      <!-- Presets Section -->
+      <section class="presets-section" id="presets">
+        <div class="section-header slide-up">
+          <h2 class="section-title">Voice Presets</h2>
+          <p class="section-subtitle">One-click configuration for popular voice personas</p>
+        </div>
+        <div class="presets-grid" id="presetsGrid"></div>
+      </section>
+
+      <!-- History Section -->
+      <section class="history-section" id="history">
+        <div class="section-header slide-up">
+          <h2 class="section-title">Voice History</h2>
+          <div class="section-actions">
+            <button class="btn-ghost" id="clearHistoryBtn">Clear All</button>
+          </div>
+        </div>
+        <div class="history-list" id="historyList">
+          <div class="empty-state" id="historyEmpty">
+            <div class="empty-icon">🎙️</div>
+            <div class="empty-title">No voices generated yet</div>
+            <div class="empty-sub">Your generated voices will appear here</div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-inner">
+        <div class="footer-logo">VoiceForge AI</div>
+        <div class="footer-links">
+          <a href="#">Docs</a>
+          <a href="#">API</a>
+          <a href="#">Pricing</a>
+          <a href="#">Status</a>
+        </div>
+        <div class="footer-copy">© 2025 VoiceForge AI. Built with ❤️</div>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>

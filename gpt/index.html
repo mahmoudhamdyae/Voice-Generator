@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Voice Generator Studio</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div class="particles"></div>
+
+<header class="topbar glass">
+  <div class="logo">🎙 AI Voice Studio</div>
+  <div class="top-actions">
+    <button id="exportSettings" class="ghost-btn">Export</button>
+    <button id="importSettings" class="ghost-btn">Import</button>
+    <input type="file" id="importFile" hidden />
+    <label class="theme-switch">
+      <input type="checkbox" id="themeToggle" />
+      <span class="slider"></span>
+    </label>
+  </div>
+</header>
+
+<main class="container">
+
+  <section class="text-section glass card">
+    <h2>Text Input</h2>
+    <textarea id="textInput" placeholder="Type something magical...
+Example:
+'Welcome to the future of AI voice generation.'"></textarea>
+    <div class="text-footer">
+      <span id="charCount">0 characters</span>
+      <button id="clearText" class="ghost-btn small">Clear</button>
+    </div>
+  </section>
+
+  <section class="config-section glass card">
+    <h2>Voice Configuration</h2>
+    <div class="grid">
+
+      <div class="field">
+        <label>Language</label>
+        <select id="language">
+          <option>English</option>
+          <option>Arabic</option>
+          <option>French</option>
+          <option>Spanish</option>
+          <option>German</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Accent</label>
+        <select id="accent">
+          <option>American English</option>
+          <option>British English</option>
+          <option>Australian English</option>
+          <option>Egyptian Arabic</option>
+          <option>Saudi Arabic</option>
+          <option>Emirati Arabic</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Gender</label>
+        <select id="gender">
+          <option>Male</option>
+          <option>Female</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Emotion</label>
+        <select id="emotion">
+          <option>Happy</option>
+          <option>Sad</option>
+          <option>Angry</option>
+          <option>Excited</option>
+          <option>Romantic</option>
+          <option>Calm</option>
+          <option>Serious</option>
+          <option>Motivational</option>
+          <option>Fearful</option>
+          <option>Whispering</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Speaking Style</label>
+        <select id="style">
+          <option>Podcast</option>
+          <option>Storytelling</option>
+          <option>News Reporter</option>
+          <option>Teacher</option>
+          <option>Anime</option>
+          <option>Documentary</option>
+          <option>Friendly</option>
+          <option>Professional</option>
+          <option>Gaming Streamer</option>
+          <option>Cinematic Trailer</option>
+        </select>
+      </div>
+
+    </div>
+
+    <h3>Voice Controls</h3>
+    <div class="sliders">
+      <div class="slider-group">
+        <label>Speed <span id="speedVal">1</span></label>
+        <input type="range" id="speed" min="0.5" max="2" step="0.1" value="1" />
+      </div>
+      <div class="slider-group">
+        <label>Pitch <span id="pitchVal">1</span></label>
+        <input type="range" id="pitch" min="0.5" max="2" step="0.1" value="1" />
+      </div>
+      <div class="slider-group">
+        <label>Volume <span id="volumeVal">1</span></label>
+        <input type="range" id="volume" min="0" max="1" step="0.1" value="1" />
+      </div>
+      <div class="slider-group">
+        <label>Stability <span id="stabilityVal">50</span></label>
+        <input type="range" id="stability" min="0" max="100" value="50" />
+      </div>
+      <div class="slider-group">
+        <label>Creativity <span id="creativityVal">50</span></label>
+        <input type="range" id="creativity" min="0" max="100" value="50" />
+      </div>
+    </div>
+
+  </section>
+
+  <section class="prompt-section glass card">
+    <h2>AI Prompt</h2>
+    <p id="promptOutput"></p>
+  </section>
+
+  <section class="presets-section glass card">
+    <h2>Voice Presets</h2>
+    <div class="presets" id="presets"></div>
+  </section>
+
+  <section class="generate-section">
+    <button id="generateBtn" class="primary-btn">Generate Voice</button>
+    <div id="loader" class="loader hidden"></div>
+  </section>
+
+  <section class="audio-section glass card hidden" id="audioSection">
+    <h2>Generated Audio</h2>
+    <div class="audio-player">
+      <button id="playPause">▶</button>
+      <div class="progress-container">
+        <div class="progress" id="progress"></div>
+      </div>
+      <button id="replay">↺</button>
+      <button id="download">⬇</button>
+    </div>
+    <audio id="audio" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
+  </section>
+
+  <section class="history-section glass card">
+    <h2>Voice History</h2>
+    <div id="historyList"></div>
+  </section>
+
+</main>
+
+<script src="script.js"></script>
+</body>
+</html>
